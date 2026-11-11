@@ -1,5 +1,5 @@
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Header from "./components/Header";
 import RequireAuth from "./components/RequireAuth";
@@ -20,44 +20,24 @@ function App() {
       <Header />
 
       <Routes>
-        <Route path="/" element={<Home />} />
+        {/* Login and Register remain accessible */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route
-          path="/products/:id"
-          element={<ProductDetails />}
-        />
 
+        {/* All shopping pages require login */}
         <Route element={<RequireAuth />}>
-          <Route
-            path="/my-products"
-            element={<MyProducts />}
-          />
-          <Route
-            path="/products/create"
-            element={<ProductForm />}
-          />
-          <Route
-            path="/products/edit/:id"
-            element={<ProductForm />}
-          />
+          <Route path="/" element={<Home />} />
+          <Route path="/products/:id" element={<ProductDetails />} />
+          <Route path="/my-products" element={<MyProducts />} />
+          <Route path="/products/create" element={<ProductForm />} />
+          <Route path="/products/edit/:id" element={<ProductForm />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/profile" element={<Profile />} />
-          <Route
-            path="/my-orders"
-            element={<MyOrders />}
-          />
+          <Route path="/my-orders" element={<MyOrders />} />
         </Route>
 
-        <Route
-          path="*"
-          element={
-            <main style={{ padding: "40px" }}>
-              <h1>Page Not Found</h1>
-              <p>The page you requested does not exist.</p>
-            </main>
-          }
-        />
+        {/* Unknown URLs return to Home or Login */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
